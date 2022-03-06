@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home page</title>
+        <link href="../static/style.css" rel="stylesheet"/>
+    </head>
+    <body>
+      <h1>WELCOME  TO  OUR  SHOP</h1><br>
+      <form action="{{url_for('addp')}}" method="POST">
+            
+            <lable>Product Name</lable>
+            <input type="text" name="pname" /><br><br>
+            <lable>Product Details</lable>
+            <input type="text" name="pdetails" /><br><br>
+            <lable>Price</lable>
+            <input type="text" name="price" /><br><br>
+            <lable>Available Quantity</lable>
+            <input type="text" name="quantity" /><br><br>
+            <input type="submit" name="addp" value="ADD PRODUCTS"><br><br>
+        </form> 
+            
+       <h3>following is list of products FOR_MALE</h3>
+         <table border="1" width="400">
+             <tr>
+                 <th>product name</th>
+                 <th>product details</th>
+                 <th>price</th>
+                 <th>available quantity</th>
+                 <th colspan="3">Action</th>
+             </tr>
+             {% for row in data %}
+             <tr>
+                 <td> {{row[1]}}</a></td>
+                 <td> <a href="{{row[2]}}">{{row[2]}}</a></td>
+                 <td> {{row[3]}}</a></td>
+                 <td> {{row[4]}}</a></td>
+                 <td><a href="{{url_for('editp',id=row[0])}}">edit</a></td>
+                 <td><a href="{{url_for('deletep',id=row[0])}}">delete</a></td>
+                 <td><a href="{{url_for('buyp',id=row[0])}}">Buy</a></td>
+             </tr>
+             {% endfor %}
+          </table>     
+          <footer>
+            <p>copyright &copy; 2021. all rights reserved.</p>
+        </footer>
+    </body>
+</html>       
