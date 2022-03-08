@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home page</title>
+        <link href="../static/style.css" rel="stylesheet"/>
+    </head>
+    <body>
+    <h1>WELCOME  TO  OUR  SHOP</h1><br>
+        <h3>CUSTOMER DETAILS</h3>
+        <form action="{{url_for('buypf')}}" method="POST">
+            
+             <input type="hidden" name="pid" value="{{singuser[0]}}"}>
+            <lable>Product Name</lable>
+            <input type="text" name="pname" value="{{singuser[1]}}"/><br><br>
+            <lable>Product details</lable>
+            <input type="text" name="pdetails" value="{{singuser[2]}}"/><br><br>
+            <lable>Price</lable>
+            <input type="text" name="price" value="{{singuser[3]}}"/><br><br>
+            <lable>Available Quantity</lable>
+            <input type="text" name="quantity" value="{{singuser[4]}}"/><br><br>
+            <lable>Buyed Quantity</lable>
+            <input type="text" name="quantity" placeholder="Enter buyed quantity"/><br><br>
+            <lable>Customer name</lable>
+            <input type="text" name="name" placeholder="Enter name"/><br><br>
+            <lable>Address</lable>
+            <input type="text" name="address" placeholder="Enter address"/><br><br>
+            <lable>Contact</lable>
+            <input type="text" name="contact" placeholder="Enter contact no."/><br><br>
+            <lable>Payment Mode</lable>
+            <select>
+                  <option>cash on delivery</option>
+                  <option>debit card</option>
+                  <option>credit card</option>
+            </select><br><br>
+            
+            <a href="{{url_for('buyed')}}">PLACE ORDER</a>
+         </form> 
+          <footer>
+            <p>copyright &copy; 2021. all rights reserved.</p>
+        </footer>
+    </body>
+</html>   
+        
