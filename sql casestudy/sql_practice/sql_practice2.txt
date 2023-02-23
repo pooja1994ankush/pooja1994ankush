@@ -1,0 +1,168 @@
+create table employee2(
+empid int primary key,fullname char(20),managerid int,doj date,city char(20)
+);
+
+
+insert into employee2 values(121,'john snow',321,'2019-01-31','Toronto'),
+(321,'water white',986,'2020-01-30','Californiya'),
+(421,'kuldip rana',876,'2021-11-27','New Delhi');
+
+
+create table empsalary(
+empid int,
+project char(20),
+salary int,
+variable int,
+primary key (empid),
+foreign key(empid) references employee2(empid)
+);
+
+insert into empsalary values(121,'P1',8000,500),
+(321,'P2',10000,1000),
+(421,'P1',12000,0);
+
+select * from employee2;
+select * from empsalary;
+
+-- Ques.1. Write an SQL query to fetch the EmpId and FullName of all the employees working under the Manager with id – ‘986’.
+select empid,fullname from employee2 where managerid=986;
+
+--Ques.2. Write an SQL query to fetch the different projects available from the EmployeeSalary table.
+select  distinct project from empsalary;
+
+--Ques.3. Write an SQL query to fetch the count of employees working in project ‘P1’.
+select count(empid) from empsalary where project='P1';
+
+
+--Ques.4. Write an SQL query to find the maximum, minimum, and average salary of the employees.
+select max(salary) as 'maxsalary',min(salary) as 'minsalary',avg(salary) as 'avgsalary' from empsalary;
+
+--Ques.5. Write an SQL query to find the employee id whose salary lies in the range of 9000 and 15000.
+select empid,salary from empsalary where salary between 9000 and 15000;
+
+--Ques.6. Write an SQL query to fetch those employees who live in Toronto and work under the manager with ManagerId – 321.
+select * from employee2 where city='Toronto' and managerid=321;
+
+--Ques.7. Write an SQL query to fetch all those employees who work on Projects other than P1.
+select * from empsalary where not project= 'P1';
+select * from empsalary where project not in('P1');
+
+--Ques.8. Write an SQL query to display the total salary of each employee adding the Salary with Variable value.
+select empid,project,salary,variable,salary+variable as 'Total salary' from empsalary;
+
+--Ques.9. Write an SQL query to fetch the employees whose name begins with any two characters, followed by a text “hn” and ends with any sequence of characters.
+select fullname from employee2 where fullname like '__hn%';
+
+--Ques.10. Write an SQL query to fetch all the EmpIds which are present in either of the tables – ‘Employee2’ and ‘EmployeeSalary’.
+select empid from employee2
+union
+select empid from empsalary;
+
+--Ques.11. Write an SQL query to fetch common records between two tables.
+select empid from employee2
+intersect
+select empid from empsalary;
+
+--mysql doesn't have intersect operator so we can use the subquery.
+select * from employee2 where empid in(select empid from empsalary);
+
+
+--Ques.12. Write an SQL query to fetch records that are present in one table but not in another table.
+select  * from employee2
+minus
+select * from empsalary;
+
+--Ques.13. Write an SQL query to fetch the EmpIds that are present in Employee2 but not in EmployeeSalary.
+select empid from employee2 where empid not in(select empid from empsalary);
+
+--Ques.14. Write an SQL query to fetch the employee’s full names and replace the space with ‘-’.
+select replace(fullname,' ','-') from employee2;
+
+--Ques.15. Write an SQL query to display both the EmpId and ManagerId together.
+select concat(empid,managerid) as 'newid' from employee2;
+
+--Ques.16. Write a query to fetch only the first name(string before space) from the FullName column of the Employee2 table.
+select SUBSTRING(fullname,1,CHARINDEX(' ',fullname)) from employee2;
+
+--Ques.17. Write an SQL query to fetch the position of a given character(s) in a field.
+select CHARINDEX('snow',fullname) from employee2;
+
+--Ques.18. Write an SQL query to find the count of the total occurrences of a particular character – ‘n’ in the FullName field.
+select len(fullname)-len(replace(fullname,'n','')) from employee2;
+
+--Ques.19. Write an SQL query to update the employee names by removing leading and trailing spaces.
+update employee2 set fullname=LTRIM(RTRIM(fullname));
+select * from employee2;
+
+--Ques.20. Fetch all the employees who are not working on any project.
+select empid from empsalary where project is null;
+
+--Ques.21.  Write an SQL query to fetch employee names having a salary greater than or equal to 5000 and less than or equal to 10000.
+select fullname from employee2 where empid in(select empid from empsalary where salary between 5000 and 10000);
+
+--Ques.22. Write an SQL query to fetch all the Employee details from the Employee2 table who joined in the Year 2020.
+select * from employee2 where doj between '2020-01-01' and '2020-12-31';
+
+-- In mysql we can extract year from date of joining
+select * from employee2 where YEAR(doj)='2020';
+
+-- Ques.23. Write an SQL query to fetch all employee records from the Employee2 table who have a salary record in the EmployeeSalary table.
+select * from employee2 e1 where 
+exists(select * from empsalary e2 where e1.empid=e2.empid);
+
+--Ques.24. Write an SQL query to fetch the project-wise count of employees sorted by project’s count in descending order.
+select project,count(*) as 'count_of_project' from empsalary group by project order by 'count_of_project' desc;
+
+
+--Ques.25. Write a query to fetch employee names and salary records. Display the employee2 even if the salary record is not present for the employee.
+select fullname,salary from employee2 e1 
+left join empsalary e2
+on e1.empid=e2.empid;
+
+--Ques.26. Write an SQL query to join 3 tables.
+select col1,col2 from table A
+join table B on table A.column3=table B.column3
+join table C on table A.column4=table C.column4;
+
+
+--Ques. 27. Write an SQL query to fetch all the Employees who are also managers from the Employee2 table.
+select distinct e1.fullname from employee2 e1 
+inner join employee2 e2
+on e1.empid=e2.managerid;
+
+--Ques.28. Write an SQL query to fetch duplicate records from Employee2 (without considering the primary key – EmpId).
+select fullname,managerid,doj,city,count(*) from employee2
+group by fullname,managerid,doj,city 
+having count(*)>1;
+
+--Ques.29. Write an SQL query to create a new table with data and structure copied from another table.
+select * into new_table from employee2;
+select * from new_table;
+
+--Ques.30. Write an SQL query to create an empty table with the same structure as some other table.
+select * into new_table1 from employee2 where 1=2;
+select * from new_table1;
+
+--Ques.31. Write an SQL query to fetch top n records.()
+-- in mysql using limit 
+select * from empsalary order by salary desc limit 2;
+
+-- in mssql using top keyword
+select top 2 * from empsalary order by salary desc;
+
+--Ques.32. Write an SQL query to find the nth highest salary from a table.(2)
+-- mssql
+select top 1 salary 
+from(select top 2 salary from empsalary order by salary desc) order by salary asc;
+--mysql
+select salary from empsalary order by salary desc limit 1,1;
+
+--Ques.33. Write SQL query to find the 3rd highest salary from a table without using the TOP/limit keyword.
+select salary from empsalary e1
+where 2=(select count(distinct(e2.salary)) from empsalary e2 where e2.salary>e1.salary);
+
+--2nd highest salary
+select salary from empsalary e1 where 1=(select count(distinct(e2.salary)) 
+from empsalary e2 where e2.salary>e1.salary);
+
+
